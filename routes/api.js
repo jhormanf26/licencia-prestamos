@@ -18,7 +18,7 @@ router.post('/activacion', async (req, res) => {
             return res.status(400).json({ ok: false, mensaje: 'Token requerido.' });
         }
 
-        // Verificar el token
+        // 1. Verificar el token JWT
         let decoded;
         try {
             decoded = jwt.verify(token, JWT_SECRET);
@@ -31,24 +31,33 @@ router.post('/activacion', async (req, res) => {
             return res.status(400).json({ ok: false, mensaje: 'Token sin empresa_id.' });
         }
 
-        // Buscar la licencia más reciente activa de esta empresa
+        // 2. Capturar datos de origen
+        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'desconocida';
+        const servidor = req.body.servidor || req.hostname;
+
+        // 3. Buscar la licencia más reciente ACTIVA para esta empresa
         const [lics] = await db.query(
             "SELECT id FROM licencias_emitidas WHERE empresa_id = ? AND estado = 'Activa' ORDER BY id DESC LIMIT 1",
             [empresa_id]
         );
         const licencia_id = lics.length > 0 ? lics[0].id : null;
 
-        // Capturar IP del cliente
-        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'desconocida';
-        const servidor = req.body.servidor || req.hostname;
-
-        // Insertar activación
+        // 4. Registrar siempre la activación en el historial (para auditoría)
         await db.query(
             'INSERT INTO historial_activaciones (empresa_id, licencia_id, ip, servidor, fecha) VALUES (?, ?, ?, ?, NOW())',
             [empresa_id, licencia_id, ip, servidor]
         );
 
-        res.json({ ok: true, mensaje: 'Activación registrada.' });
+        // 5. Validar si se encontró una licencia activa
+        if (!licencia_id) {
+            return res.status(403).json({ 
+                ok: false, 
+                mensaje: 'La licencia para esta empresa se encuentra suspendida, vencida o no existe en el panel.' 
+            });
+        }
+
+        res.json({ ok: true, mensaje: 'Activación registrada y licencia válida.' });
+
     } catch(e) {
         console.error('[API Activacion Error]', e.message);
         res.status(500).json({ ok: false, mensaje: 'Error interno del servidor.' });
