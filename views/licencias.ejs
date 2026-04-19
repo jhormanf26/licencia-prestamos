@@ -97,7 +97,7 @@
                                 <td><%= lic.tipo %></td>
                                 <td><%= new Date(lic.fecha_emision).toLocaleDateString() %></td>
                                 <td><%= lic.fecha_vencimiento ? new Date(lic.fecha_vencimiento).toLocaleDateString() : '-' %></td>
-                                <td>S/ <%= parseFloat(lic.precio || 0).toFixed(2) %></td>
+                                <td><%= formatMoney(lic.precio) %></td>
                                 <td><span class="badge badge-<%= lic.estado.toLowerCase() %>"><%= lic.estado %></span></td>
                                 <td>
                                     <div class="actions-group">

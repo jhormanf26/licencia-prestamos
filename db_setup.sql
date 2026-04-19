@@ -73,3 +73,14 @@ VALUES ('admin', '$2b$10$PCLCE68Tworas8acqbiKHe1eaKd4jLs/xbjVJWoOenXVV8aKVbFNu')
 INSERT INTO empresas (razon_social, ruc, responsable, email) 
 VALUES ('EMPRESA 1', '20202020201', 'JULIO', 'empresa1@correo.com');
 
+-- Configuración General
+CREATE TABLE IF NOT EXISTS configuracion_general (
+    id INT PRIMARY KEY DEFAULT 1,
+    nombre_proveedor VARCHAR(255) DEFAULT 'Sistema Préstamos Pro',
+    moneda VARCHAR(50) DEFAULT 'S/',
+    dias_alerta INT DEFAULT 30,
+    precio_demo DECIMAL(10,2) DEFAULT 0.00
+);
+INSERT INTO configuracion_general (id) VALUES (1) ON DUPLICATE KEY UPDATE id=1;
+
+

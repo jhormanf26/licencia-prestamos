@@ -62,11 +62,11 @@
             <div class="summary-cards">
                 <div class="card bg-green">
                     <span class="card-title">Total Cobrado</span>
-                    <span class="card-value">S/ <%= parseFloat(totales.total_cobrado || 0).toFixed(2) %></span>
+                    <span class="card-value"><%= formatMoney(totales.total_cobrado) %></span>
                 </div>
                 <div class="card bg-orange">
                     <span class="card-title">Pendiente de Cobro</span>
-                    <span class="card-value">S/ <%= parseFloat(totales.total_pendiente || 0).toFixed(2) %></span>
+                    <span class="card-value"><%= formatMoney(totales.total_pendiente) %></span>
                 </div>
                 <div class="card bg-purple">
                     <span class="card-title">Total Registros</span>
@@ -113,7 +113,7 @@
                                 <td><%= i + 1 %></td>
                                 <td><strong><%= pago.empresa %></strong></td>
                                 <td><%= pago.tipo_licencia || '-' %></td>
-                                <td><strong>S/ <%= parseFloat(pago.monto).toFixed(2) %></strong></td>
+                                <td><strong><%= formatMoney(pago.monto) %></strong></td>
                                 <td><%= pago.metodo_pago || 'Efectivo' %></td>
                                 <td><%= pago.referencia || '-' %></td>
                                 <td><%= pago.fecha_pago ? new Date(pago.fecha_pago).toLocaleDateString('es-PE') : '-' %></td>

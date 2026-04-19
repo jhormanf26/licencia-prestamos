@@ -104,7 +104,7 @@
                             </div>
                             <div class="info-row">
                                 <div class="info-label">Precio:</div>
-                                <div class="info-value">S/ <%= parseFloat(licencia.precio || 0).toFixed(2) %></div>
+                                <div class="info-value"><%= formatMoney(licencia.precio) %></div>
                             </div>
                             <div class="info-row">
                                 <div class="info-label">Estado:</div>
@@ -141,8 +141,9 @@
                             <form action="/pagos/registrar" method="POST">
                                 <input type="hidden" name="licencia_id" value="<%= licencia.id %>">
                                 <div class="form-group">
-                                    <label>Monto (S/)</label>
-                                    <input type="number" step="0.01" name="monto" value="<%= parseFloat(licencia.precio || 0).toFixed(2) %>" required>
+                                    <label>Monto (<%= globalConfig.moneda %>)</label>
+                                    <input type="number" step="0.01" name="monto" id="monto_pago" value="<%= parseFloat(licencia.precio || 0).toFixed(2) %>" required>
+                                    <div id="monto_pago_preview" style="color: #15803d; font-weight: 700; font-size: 13px; margin-top: 5px;">$ 0,00</div>
                                 </div>
                                 <div class="form-grid">
                                     <div class="form-group">
@@ -224,7 +225,7 @@
                                     <% pagos.forEach(pago => { %>
                                         <tr>
                                             <td><%= pago.fecha_pago ? new Date(pago.fecha_pago).toLocaleDateString() : '-' %></td>
-                                            <td>S/ <%= parseFloat(pago.monto).toFixed(2) %></td>
+                                            <td><%= formatMoney(pago.monto) %></td>
                                             <td><%= pago.metodo_pago || '-' %></td>
                                             <td><%= pago.referencia || '-' %></td>
                                             <td><span class="badge badge-<%= pago.estado.toLowerCase() %>"><%= pago.estado %></span></td>
@@ -236,7 +237,7 @@
                                                         </button>
                                                     </form>
                                                 <% } else { %>
-                                                    <span style="color:#94a3b8;font-size:12px;">—</span>
+                                                    <span style="color:#10b981;font-size:12px;"><i class="fa-solid fa-file-circle-check"></i> Finalizado</span>
                                                 <% } %>
                                             </td>
                                         </tr>
@@ -256,6 +257,20 @@
                 alert('Clave de la licencia copiada al portapapeles');
             });
         }
+
+        // Lógica de Previsualización de Pago
+        const montoInput = document.getElementById('monto_pago');
+        const montoPreview = document.getElementById('monto_pago_preview');
+        const monedaActual = '<%= globalConfig.moneda %>';
+
+        function updateMontoPreview() {
+            const val = parseFloat(montoInput.value) || 0;
+            const formatted = val.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            montoPreview.innerText = monedaActual + ' ' + formatted;
+        }
+
+        montoInput.addEventListener('input', updateMontoPreview);
+        updateMontoPreview();
     </script>
 </body>
 </html>

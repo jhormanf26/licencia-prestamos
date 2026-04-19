@@ -210,7 +210,7 @@ router.post('/pagos/registrar', isAuthenticated, async (req, res) => {
         const [lic] = await db.query('SELECT empresa_id FROM licencias_emitidas WHERE id = ?', [licencia_id]);
         if(lic.length > 0) {
             await db.query(
-                'INSERT INTO pagos_licencias (empresa_id, licencia_id, monto, metodo_pago, referencia, estado) VALUES (?, ?, ?, ?, ?, ?)',
+                'INSERT INTO pagos_licencias (empresa_id, licencia_id, monto, metodo_pago, referencia, estado, fecha_pago) VALUES (?, ?, ?, ?, ?, ?, CURDATE())',
                 [lic[0].empresa_id, licencia_id, monto, metodo || 'Efectivo', referencia || '', estado]
             );
         }
@@ -331,10 +331,14 @@ router.get('/configuracion', isAuthenticated, async (req, res) => {
         const admin = req.session.admin;
         const [empresas] = await db.query('SELECT COUNT(*) as count FROM empresas');
         const [licencias] = await db.query('SELECT COUNT(*) as count FROM licencias_emitidas WHERE estado = "Activa"');
+        const [configRows] = await db.query('SELECT * FROM configuracion_general WHERE id = 1');
+        
         const stats = { empresas: empresas[0].count, licencias: licencias[0].count };
+        const config = configRows[0] || { nombre_proveedor: 'Sistema Préstamos Pro', moneda: 'S/', dias_alerta: 30, precio_demo: 0 };
+        
         const success_msg = req.flash('success_msg');
         const error_msg = req.flash('error_msg');
-        res.render('configuracion', { admin, stats, success_msg, error_msg });
+        res.render('configuracion', { admin, stats, config, success_msg, error_msg });
     } catch(e) {
         console.error(e);
         res.send('Error al cargar configuración');
@@ -374,10 +378,22 @@ router.post('/configuracion/cambiar-password', isAuthenticated, async (req, res)
     }
 });
 
-router.post('/configuracion/general', isAuthenticated, (req, res) => {
-    // En una versión futura esto se guardaría en DB. Por ahora redirige con mensaje.
-    req.flash('success_msg', '✅ Configuración guardada correctamente.');
-    res.redirect('/configuracion');
+router.post('/configuracion/general', isAuthenticated, async (req, res) => {
+    try {
+        const { nombre_proveedor, moneda, dias_alerta, precio_demo } = req.body;
+        await db.query(`
+            UPDATE configuracion_general 
+            SET nombre_proveedor = ?, moneda = ?, dias_alerta = ?, precio_demo = ? 
+            WHERE id = 1
+        `, [nombre_proveedor, moneda, dias_alerta, precio_demo]);
+
+        req.flash('success_msg', '✅ Configuración guardada correctamente.');
+        res.redirect('/configuracion');
+    } catch (e) {
+        console.error(e);
+        req.flash('error_msg', 'Error al guardar configuración.');
+        res.redirect('/configuracion');
+    }
 });
 
 router.get('/', (req, res) => res.redirect('/login'));

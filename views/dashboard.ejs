@@ -77,22 +77,22 @@
             <div class="summary-cards">
                 <div class="card bg-purple">
                     <span class="card-title">Empresas Activas</span>
-                    <span class="card-value"><%= stats.empresas %></span>
+                    <span class="card-value"><%= formatNumber(stats.empresas) %></span>
                     <i class="fa-solid fa-building card-icon"></i>
                 </div>
                 <div class="card bg-green">
                     <span class="card-title">Licencias Activas</span>
-                    <span class="card-value"><%= stats.licencias %></span>
+                    <span class="card-value"><%= formatNumber(stats.licencias) %></span>
                     <i class="fa-solid fa-certificate card-icon"></i>
                 </div>
                 <div class="card bg-orange">
                     <span class="card-title">Por Vencer (30d)</span>
-                    <span class="card-value"><%= stats.por_vencer %></span>
+                    <span class="card-value"><%= formatNumber(stats.por_vencer) %></span>
                     <i class="fa-solid fa-triangle-exclamation card-icon"></i>
                 </div>
                 <div class="card bg-blue">
                     <span class="card-title">Ingresos del Mes</span>
-                    <span class="card-value">S/ <%= stats.ingresos.toFixed(2) %></span>
+                    <span class="card-value"><%= formatMoney(stats.ingresos) %></span>
                     <i class="fa-solid fa-dollar-sign card-icon"></i>
                 </div>
             </div>

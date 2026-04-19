@@ -96,8 +96,9 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Precio (S/) <span>*</span></label>
-                                <input type="number" step="0.01" name="precio" value="0.00" required>
+                                <label>Precio (<%= globalConfig.moneda %>) <span>*</span></label>
+                                <input type="number" step="0.01" name="precio" value="0.00" required id="precio_input">
+                                <div class="form-hint" id="precio_preview" style="color: #15803d; font-weight: 700; font-size: 13px;">$ 0,00</div>
                             </div>
                         </div>
 
@@ -157,12 +158,24 @@
             vencimientoEl.value = vencimiento.toISOString().split('T')[0];
         }
     
+        const precioInput = document.getElementById('precio_input');
+        const precioPreview = document.getElementById('precio_preview');
+        const monedaActual = '<%= globalConfig.moneda %>';
+
+        function updatePrecioPreview() {
+            const val = parseFloat(precioInput.value) || 0;
+            const formatted = val.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            precioPreview.innerText = monedaActual + ' ' + formatted;
+        }
+    
         tipoEl.addEventListener('change', calcularVencimiento);
         cantidadEl.addEventListener('input', calcularVencimiento);
         inicioEl.addEventListener('change', calcularVencimiento);
+        precioInput.addEventListener('input', updatePrecioPreview);
     
         // Initial calc
         calcularVencimiento();
+        updatePrecioPreview();
     </script>
 </body>
 </html>

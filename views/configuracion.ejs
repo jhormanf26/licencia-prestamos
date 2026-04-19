@@ -153,11 +153,11 @@
                         <p style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 5px;">Información del Sistema</p>
                         <div class="admin-info-row">
                             <span class="admin-label">Total empresas registradas</span>
-                            <span class="admin-value"><%= stats.empresas %></span>
+                            <span class="admin-value"><%= formatNumber(stats.empresas) %></span>
                         </div>
                         <div class="admin-info-row">
                             <span class="admin-label">Licencias activas</span>
-                            <span class="admin-value"><%= stats.licencias %></span>
+                            <span class="admin-value"><%= formatNumber(stats.licencias) %></span>
                         </div>
                         <div class="admin-info-row">
                             <span class="admin-label">Versión del panel</span>
@@ -180,25 +180,25 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Nombre del Proveedor / Empresa</label>
-                                    <input type="text" name="nombre_proveedor" value="Sistema Préstamos Pro" placeholder="Ej: MiEmpresa Tech">
+                                    <input type="text" name="nombre_proveedor" value="<%= config.nombre_proveedor %>" placeholder="Ej: MiEmpresa Tech">
                                     <div class="form-hint">Aparece en el encabezado del panel.</div>
                                 </div>
                                 <div class="form-group">
                                     <label>Moneda por defecto</label>
                                     <select name="moneda">
-                                        <option value="S/">S/ (Soles)</option>
-                                        <option value="$">$ (Dólares)</option>
-                                        <option value="€">€ (Euros)</option>
+                                        <option value="S/" <%= config.moneda === 'S/' ? 'selected' : '' %>>S/ (Soles)</option>
+                                        <option value="$" <%= config.moneda === '$' ? 'selected' : '' %>>$ (Dólares)</option>
+                                        <option value="€" <%= config.moneda === '€' ? 'selected' : '' %>>€ (Euros)</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Días de alerta de vencimiento</label>
-                                    <input type="number" name="dias_alerta" value="30" min="1" max="90">
+                                    <input type="number" name="dias_alerta" value="<%= config.dias_alerta %>" min="1" max="90">
                                     <div class="form-hint">Marcar licencias como "Por Vencer" cuando resten estos días.</div>
                                 </div>
                                 <div class="form-group">
                                     <label>Precio por defecto Demo (S/)</label>
-                                    <input type="number" step="0.01" name="precio_demo" value="0.00">
+                                    <input type="number" step="0.01" name="precio_demo" value="<%= config.precio_demo %>">
                                     <div class="form-hint">Precio que se pre-llena al generar una licencia Demo.</div>
                                 </div>
                             </div>

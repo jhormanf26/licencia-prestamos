@@ -19,10 +19,31 @@ app.use(session({
 }));
 app.use(flash());
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
     res.locals.admin = req.session.admin || null;
+    
+    // Cargar Configuración Global
+    try {
+        const db = require('./config/db');
+        const [config] = await db.query('SELECT * FROM configuracion_general WHERE id = 1');
+        res.locals.globalConfig = config[0] || { nombre_proveedor: 'Sistema Préstamos Pro', moneda: 'S/', dias_alerta: 30, precio_demo: 0 };
+    } catch (e) {
+        res.locals.globalConfig = { nombre_proveedor: 'Sistema Préstamos Pro', moneda: 'S/', dias_alerta: 30, precio_demo: 0 };
+    }
+    
+    // Función global para formatear moneda
+    res.locals.formatMoney = (amount) => {
+        return (res.locals.globalConfig.moneda || '$') + ' ' + 
+               Number(amount || 0).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
+
+    // Función para formatear números con puntos de miles
+    res.locals.formatNumber = (num) => {
+        return Number(num || 0).toLocaleString('es-CO');
+    };
+    
     next();
 });
 
