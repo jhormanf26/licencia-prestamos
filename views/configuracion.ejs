@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - Panel de Licencias</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        body { background-color: #f8fafc; color: #334155; display: flex; }
+        .main-content { margin-left: 260px; flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+        .content-area { padding: 30px; flex: 1; }
+
+        .page-title { margin-bottom: 25px; }
+        .page-title h2 { font-size: 22px; color: #1e293b; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .page-title h2 i { color: #6366f1; }
+        .page-title p { color: #64748b; font-size: 14px; margin-top: 4px; }
+
+        .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .config-card { background: white; border-radius: 12px; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px rgba(0,0,0,0.04); overflow: hidden; }
+        .config-card-full { grid-column: 1 / -1; }
+        .card-header { padding: 18px 25px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px; }
+        .card-header i { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .icon-purple { background: #ede9fe; color: #7c3aed; }
+        .icon-blue { background: #dbeafe; color: #2563eb; }
+        .icon-green { background: #dcfce7; color: #16a34a; }
+        .icon-orange { background: #ffedd5; color: #ea580c; }
+        .card-header h3 { font-size: 15px; font-weight: 700; color: #1e293b; margin: 0; }
+        .card-header p { font-size: 12px; color: #94a3b8; margin: 0; }
+        .card-body { padding: 25px; }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 7px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 11px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.2s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #6366f1; }
+        .form-hint { font-size: 11px; color: #94a3b8; margin-top: 5px; }
+        .form-group input[readonly] { background: #f8fafc; color: #64748b; }
+
+        .btn-save { background: #6366f1; color: white; border: none; padding: 11px 22px; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; transition: background 0.2s; }
+        .btn-save:hover { background: #4f46e5; }
+        .btn-danger { background: #ef4444; color: white; border: none; padding: 11px 22px; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+
+        .alert { padding: 14px 18px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .alert-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+
+        .info-badge { display: inline-flex; align-items: center; gap: 6px; background: #ede9fe; color: #7c3aed; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+
+        .secret-key-box { background: #1e293b; color: #10b981; padding: 14px 16px; border-radius: 8px; font-family: monospace; font-size: 12px; word-break: break-all; position: relative; margin-bottom: 10px; }
+        .copy-btn { position: absolute; right: 10px; top: 10px; background: rgba(255,255,255,0.1); border: none; color: #94a3b8; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+
+        .divider { border: none; border-top: 1px solid #f1f5f9; margin: 20px 0; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .admin-info-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f1f5f9; }
+        .admin-info-row:last-child { border-bottom: none; }
+        .admin-label { font-size: 13px; color: #64748b; font-weight: 500; }
+        .admin-value { font-size: 13px; font-weight: 600; color: #1e293b; }
+    </style>
+</head>
+<body>
+    <%- include('partials/sidebar', { path: '/configuracion' }) %>
+    <div class="main-content">
+        <%- include('partials/header') %>
+        <div class="content-area">
+
+            <div class="page-title">
+                <h2><i class="fa-solid fa-gear"></i> Configuración del Sistema</h2>
+                <p>Administra las opciones generales, seguridad y parámetros del panel de licencias.</p>
+            </div>
+
+            <% if (typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
+                <div class="alert alert-success"><i class="fa-solid fa-circle-check"></i> <%= success_msg %></div>
+            <% } %>
+            <% if (typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
+                <div class="alert alert-error"><i class="fa-solid fa-circle-xmark"></i> <%= error_msg %></div>
+            <% } %>
+
+            <div class="config-grid">
+
+                <!-- Información del Administrador -->
+                <div class="config-card">
+                    <div class="card-header">
+                        <div class="card-header i icon-purple"><i class="fa-solid fa-user-shield"></i></div>
+                        <div>
+                            <h3>Cuenta de Administrador</h3>
+                            <p>Datos del usuario administrador actual</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="admin-info-row">
+                            <span class="admin-label">Usuario</span>
+                            <span class="admin-value"><%= admin.username %></span>
+                        </div>
+                        <div class="admin-info-row">
+                            <span class="admin-label">Nombre</span>
+                            <span class="admin-value"><%= admin.nombre || 'Super Administrador' %></span>
+                        </div>
+                        <div class="admin-info-row">
+                            <span class="admin-label">Rol</span>
+                            <span class="admin-value"><span class="info-badge"><i class="fa-solid fa-crown"></i> <%= admin.rol || 'Admin' %></span></span>
+                        </div>
+
+                        <hr class="divider">
+                        <p style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 15px;">Cambiar contraseña</p>
+                        <form action="/configuracion/cambiar-password" method="POST">
+                            <div class="form-group">
+                                <label>Contraseña Actual</label>
+                                <input type="password" name="password_actual" placeholder="••••••••" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Nueva Contraseña</label>
+                                    <input type="password" name="password_nueva" placeholder="••••••••" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Confirmar</label>
+                                    <input type="password" name="password_confirmar" placeholder="••••••••" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-save">
+                                <i class="fa-solid fa-lock"></i> Actualizar Contraseña
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Clave JWT -->
+                <div class="config-card">
+                    <div class="card-header">
+                        <div class="card-header i icon-green"><i class="fa-solid fa-key"></i></div>
+                        <div>
+                            <h3>Clave Secreta (JWT)</h3>
+                            <p>Usada para firmar todos los tokens de licencia</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Esta clave firma criptográficamente cada licencia generada. Debe ser <strong>idéntica</strong> en todos los sistemas cliente para que la validación offline funcione.</p>
+
+                        <div class="form-group">
+                            <label>Clave Actual</label>
+                            <div class="secret-key-box" id="jwtKey">
+                                Kj$8LmpP@qZ1xV#9RtW&3Nf*cYuTbE^2oSvA!
+                                <button class="copy-btn" onclick="copyKey()"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            </div>
+                            <div class="form-hint">⚠️ Nunca compartas esta clave públicamente. Cambiarla invalidará TODAS las licencias emitidas.</div>
+                        </div>
+
+                        <hr class="divider">
+                        <p style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 5px;">Información del Sistema</p>
+                        <div class="admin-info-row">
+                            <span class="admin-label">Total empresas registradas</span>
+                            <span class="admin-value"><%= stats.empresas %></span>
+                        </div>
+                        <div class="admin-info-row">
+                            <span class="admin-label">Licencias activas</span>
+                            <span class="admin-value"><%= stats.licencias %></span>
+                        </div>
+                        <div class="admin-info-row">
+                            <span class="admin-label">Versión del panel</span>
+                            <span class="admin-value">v1.0.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configuración General -->
+                <div class="config-card config-card-full">
+                    <div class="card-header">
+                        <div class="card-header i icon-blue"><i class="fa-solid fa-sliders"></i></div>
+                        <div>
+                            <h3>Configuración General del Panel</h3>
+                            <p>Parámetros del negocio y opciones del sistema</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form action="/configuracion/general" method="POST">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Nombre del Proveedor / Empresa</label>
+                                    <input type="text" name="nombre_proveedor" value="Sistema Préstamos Pro" placeholder="Ej: MiEmpresa Tech">
+                                    <div class="form-hint">Aparece en el encabezado del panel.</div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Moneda por defecto</label>
+                                    <select name="moneda">
+                                        <option value="S/">S/ (Soles)</option>
+                                        <option value="$">$ (Dólares)</option>
+                                        <option value="€">€ (Euros)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Días de alerta de vencimiento</label>
+                                    <input type="number" name="dias_alerta" value="30" min="1" max="90">
+                                    <div class="form-hint">Marcar licencias como "Por Vencer" cuando resten estos días.</div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Precio por defecto Demo (S/)</label>
+                                    <input type="number" step="0.01" name="precio_demo" value="0.00">
+                                    <div class="form-hint">Precio que se pre-llena al generar una licencia Demo.</div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-save">
+                                <i class="fa-solid fa-floppy-disk"></i> Guardar Configuración
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyKey() {
+            const key = document.getElementById('jwtKey').innerText.trim();
+            navigator.clipboard.writeText(key).then(() => alert('Clave copiada al portapapeles'));
+        }
+    </script>
+</body>
+</html>

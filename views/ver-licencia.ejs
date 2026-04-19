@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Licencia - Sistema de Préstamos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        body { background-color: #f8fafc; color: #334155; display: flex; }
+        .main-content { margin-left: 260px; flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+        .content-area { padding: 30px; flex: 1; position: relative; }
+        
+        .btn-back { display: inline-flex; align-items: center; gap: 8px; color: #64748b; text-decoration: none; border: 1px solid #e2e8f0; padding: 8px 15px; border-radius: 6px; font-weight: 500; margin-bottom: 20px; transition: all 0.2s; background: white;}
+        .btn-back:hover { background: #f1f5f9; }
+
+        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+        
+        .card { background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; margin-bottom: 20px; }
+        
+        .card-header-blue { background: #2563eb; color: white; padding: 15px 20px; font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 10px; }
+        .card-header-green { background: #15803d; color: white; padding: 15px 20px; font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+        .card-header-white { background: white; border-bottom: 1px solid #e2e8f0; color: #1e293b; padding: 15px 20px; font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+        
+        .badge-counter { background: #0ea5e9; color: white; border-radius: 20px; padding: 2px 8px; font-size: 12px; }
+
+        .card-body { padding: 25px; }
+
+        /* Detalles List */
+        .info-row { display: grid; grid-template-columns: 150px 1fr; margin-bottom: 12px; font-size: 14px; }
+        .info-label { font-weight: 600; color: #475569; }
+        .info-value { color: #1e293b; font-weight: 500; }
+        .ruc { color: #e11d48; font-family: monospace; }
+        
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; display: inline-block; }
+        .badge-activa, .badge-pagado { background: #dcfce7; color: #166534; }
+        .badge-suspendida, .badge-pendiente { background: #fef08a; color: #854d0e; }
+        .badge-vencida, .badge-anulado { background: #fee2e2; color: #b91c1c; }
+
+        /* Clave Box */
+        .clave-title { font-weight: 600; margin: 20px 0 10px; color: #1e293b; }
+        .clave-box { background: #1e293b; color: #10b981; font-family: monospace; padding: 15px; border-radius: 8px; word-break: break-all; margin-bottom: 15px; font-size: 13px; }
+        
+        .action-btns { display: flex; gap: 10px; }
+        .btn-outline-blue { border: 1px solid #2563eb; color: #2563eb; background: transparent; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; }
+        .btn-outline-red { border: 1px solid #ef4444; color: #ef4444; background: transparent; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; }
+        .btn-outline-yellow { border: 1px solid #eab308; color: #eab308; background: transparent; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; }
+        .btn-full-green { background: #15803d; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-weight: 600; display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 15px; }
+
+        /* Forms */
+        .form-group { margin-bottom: 15px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 8px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; outline: none; font-size: 14px; }
+        
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 12px 10px; color: #000; font-size: 13px; font-weight: 700; border-bottom: 2px solid #f1f5f9; }
+        td { padding: 15px 10px; font-size: 13px; color: #475569; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    </style>
+</head>
+<body>
+    <%- include('partials/sidebar', { path: '/licencias' }) %>
+    <div class="main-content">
+        <%- include('partials/header') %>
+        <div class="content-area">
+            <a href="/licencias" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Volver a Licencias</a>
+
+            <% if (typeof success_msg !== 'undefined' && success_msg && success_msg.length > 0) { %>
+                <div style="background:#dcfce7;border:1px solid #bbf7d0;color:#166534;padding:12px 18px;border-radius:8px;margin-bottom:15px;font-size:14px;">
+                    <i class="fa-solid fa-circle-check"></i> <%= success_msg %>
+                </div>
+            <% } %>
+            
+            <div class="split-layout">
+                <!-- Columna Izquierda -->
+                <div>
+                    <!-- Detalles Licencia -->
+                    <div class="card">
+                        <div class="card-header-blue">
+                            <i class="fa-solid fa-certificate"></i> Detalles de la Licencia
+                        </div>
+                        <div class="card-body">
+                            <div class="info-row">
+                                <div class="info-label">Empresa:</div>
+                                <div class="info-value"><%= licencia.empresa %></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">RUC:</div>
+                                <div class="info-value ruc"><%= licencia.ruc %></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Periodo:</div>
+                                <div class="info-value"><%= licencia.tipo %></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Inicio:</div>
+                                <div class="info-value"><%= new Date(licencia.fecha_emision).toLocaleDateString() %></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Vencimiento:</div>
+                                <div class="info-value"><%= licencia.fecha_vencimiento ? new Date(licencia.fecha_vencimiento).toLocaleDateString() : 'Perpetua' %></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Precio:</div>
+                                <div class="info-value">S/ <%= parseFloat(licencia.precio || 0).toFixed(2) %></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Estado:</div>
+                                <div class="info-value"><span class="badge badge-<%= licencia.estado.toLowerCase() %>"><%= licencia.estado %></span></div>
+                            </div>
+
+                            <div class="clave-title">Clave de Licencia:</div>
+                            <div class="clave-box" id="claveToken"><%= licencia.token_generado %></div>
+                            
+                            <div class="action-btns">
+                                <button class="btn-outline-blue" onclick="copyToken()"><i class="fa-regular fa-copy"></i> Copiar Clave</button>
+                                <form action="/licencias/revocar/<%= licencia.id %>" method="POST" style="display:inline;" onsubmit="return confirm('¿Revocar esta licencia? El cliente no podrá usarla.')">
+                                    <button type="submit" class="btn-outline-red"><i class="fa-solid fa-ban"></i> Revocar</button>
+                                </form>
+                                <form action="/licencias/pausar/<%= licencia.id %>" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn-outline-yellow">
+                                        <% if(licencia.estado === 'Activa') { %>
+                                            <i class="fa-solid fa-pause"></i> Pausar
+                                        <% } else { %>
+                                            <i class="fa-solid fa-play"></i> Reactivar
+                                        <% } %>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Registrar Pago -->
+                    <div class="card">
+                        <div class="card-header-green">
+                            <span><i class="fa-solid fa-file-invoice-dollar"></i> Registrar Pago</span>
+                        </div>
+                        <div class="card-body">
+                            <form action="/pagos/registrar" method="POST">
+                                <input type="hidden" name="licencia_id" value="<%= licencia.id %>">
+                                <div class="form-group">
+                                    <label>Monto (S/)</label>
+                                    <input type="number" step="0.01" name="monto" value="<%= parseFloat(licencia.precio || 0).toFixed(2) %>" required>
+                                </div>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Método</label>
+                                        <select name="metodo">
+                                            <option value="Efectivo">Efectivo</option>
+                                            <option value="Transferencia">Transferencia</option>
+                                            <option value="Yape/Plin">Yape/Plin</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Estado</label>
+                                        <input type="text" name="estado" value="Pagado" readonly style="background: #f1f5f9;">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nº Referencia / Comprobante</label>
+                                    <input type="text" name="referencia" placeholder="Opcional">
+                                </div>
+                                <button type="submit" class="btn-full-green"><i class="fa-solid fa-floppy-disk"></i> Registrar Pago</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha -->
+                <div>
+                    <!-- Activaciones -->
+                    <div class="card">
+                        <div class="card-header-white">
+                            <span><i class="fa-solid fa-clock-rotate-left"></i> Historial de Activaciones <span class="badge-counter"><%= activaciones.length %></span></span>
+                        </div>
+                        <div class="card-body" style="padding: 0;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Fecha</th>
+                                        <th>IP</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if(activaciones.length === 0){ %>
+                                        <tr><td colspan="3" style="text-align: center; color: #94a3b8; font-style: italic;">Sin activaciones aún</td></tr>
+                                    <% } %>
+                                    <% activaciones.forEach((act, i) => { %>
+                                        <tr>
+                                            <td><%= i + 1 %></td>
+                                            <td><%= new Date(act.fecha).toLocaleString() %></td>
+                                            <td><%= act.ip %></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Pagos -->
+                    <div class="card">
+                        <div class="card-header-green">
+                            <span><i class="fa-solid fa-money-bill-wave"></i> Pagos Registrados <span class="badge-counter"><%= pagos.length %></span></span>
+                        </div>
+                        <div class="card-body" style="padding: 0;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Monto</th>
+                                        <th>Método</th>
+                                        <th>Ref.</th>
+                                        <th>Estado</th>
+                                        <th>Acc.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if(pagos.length === 0){ %>
+                                        <tr><td colspan="6" style="text-align: center; color: #94a3b8; font-style: italic;">Sin pagos registrados</td></tr>
+                                    <% } %>
+                                    <% pagos.forEach(pago => { %>
+                                        <tr>
+                                            <td><%= pago.fecha_pago ? new Date(pago.fecha_pago).toLocaleDateString() : '-' %></td>
+                                            <td>S/ <%= parseFloat(pago.monto).toFixed(2) %></td>
+                                            <td><%= pago.metodo_pago || '-' %></td>
+                                            <td><%= pago.referencia || '-' %></td>
+                                            <td><span class="badge badge-<%= pago.estado.toLowerCase() %>"><%= pago.estado %></span></td>
+                                            <td>
+                                                <% if(pago.estado === 'Pendiente') { %>
+                                                    <form action="/pagos/marcar-pagado/<%= pago.id %>" method="POST" style="display:inline;">
+                                                        <button type="submit" style="background:#15803d;color:white;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:12px;">
+                                                            <i class="fa-solid fa-check"></i> Cobrado
+                                                        </button>
+                                                    </form>
+                                                <% } else { %>
+                                                    <span style="color:#94a3b8;font-size:12px;">—</span>
+                                                <% } %>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function copyToken() {
+            var tokenText = document.getElementById('claveToken').innerText;
+            navigator.clipboard.writeText(tokenText).then(function() {
+                alert('Clave de la licencia copiada al portapapeles');
+            });
+        }
+    </script>
+</body>
+</html>
