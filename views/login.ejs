@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,13 +16,16 @@
             padding: 0;
             font-family: 'Outfit', sans-serif;
         }
+
         body {
-            background-color: #f3f4f6; /* Light gray background */
+            background-color: #f3f4f6;
+            /* Light gray background */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
+
         .login-container {
             background-color: #ffffff;
             border-radius: 16px;
@@ -32,6 +36,7 @@
             max-width: 95vw;
             min-height: 550px;
         }
+
         /* Left Section / Image */
         .login-image-section {
             flex: 1;
@@ -43,6 +48,7 @@
             color: white;
             position: relative;
         }
+
         .brand-logo {
             position: absolute;
             top: 40px;
@@ -53,21 +59,26 @@
             font-size: 24px;
             font-weight: 600;
         }
+
         .brand-logo i {
-            color: #fbbf24; /* yellow/gold */
+            color: #fbbf24;
+            /* yellow/gold */
         }
+
         .image-content h2 {
             font-size: 36px;
             margin-bottom: 15px;
             font-weight: 700;
             line-height: 1.2;
         }
+
         .image-content p {
             font-size: 16px;
             opacity: 0.9;
             margin-bottom: 30px;
             line-height: 1.5;
         }
+
         .version {
             font-size: 12px;
             opacity: 0.7;
@@ -84,10 +95,12 @@
             flex-direction: column;
             justify-content: center;
         }
+
         .form-header {
             text-align: center;
             margin-bottom: 35px;
         }
+
         .shield-icon {
             width: 60px;
             height: 60px;
@@ -100,12 +113,14 @@
             font-size: 28px;
             margin: 0 auto 20px;
         }
+
         .form-header h3 {
             font-size: 26px;
             color: #1e293b;
             margin-bottom: 8px;
             font-weight: 700;
         }
+
         .form-header p {
             color: #64748b;
             font-size: 13px;
@@ -113,11 +128,12 @@
             letter-spacing: 1px;
             font-weight: 600;
         }
-        
+
         .form-group {
             margin-bottom: 22px;
             position: relative;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
@@ -127,9 +143,11 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
         .input-wrapper {
             position: relative;
         }
+
         .input-wrapper i {
             position: absolute;
             left: 15px;
@@ -139,6 +157,7 @@
             font-size: 16px;
             transition: color 0.3s;
         }
+
         .form-group input {
             width: 100%;
             padding: 14px 15px 14px 45px;
@@ -150,22 +169,25 @@
             transition: all 0.3s ease;
             outline: none;
         }
+
         .form-group input:focus {
             background-color: #ffffff;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
-        .form-group input:focus + i, 
-        .input-wrapper input:focus ~ i {
+
+        .form-group input:focus+i,
+        .input-wrapper input:focus~i {
             color: #3b82f6;
         }
 
         button.btn-login {
             width: 100%;
             padding: 16px;
-            background-color: #e56d53; /* Using the warm color from reference somewhat but fitting theme (or just nice blue, wait... reference had brownish/salmon, let me use a robust blue for loan but let's stick to beautiful blue) */
+            background-color: #e56d53;
+            /* Using the warm color from reference somewhat but fitting theme (or just nice blue, wait... reference had brownish/salmon, let me use a robust blue for loan but let's stick to beautiful blue) */
             /* I'll use blue #2563EB or maybe a nice dark green/blue */
-            background-color: #2563eb; 
+            background-color: #2563eb;
             color: white;
             border: none;
             border-radius: 8px;
@@ -180,9 +202,11 @@
             margin-top: 10px;
             letter-spacing: 0.5px;
         }
+
         button.btn-login:hover {
             background-color: #1d4ed8;
         }
+
         button.btn-login:active {
             transform: scale(0.98);
         }
@@ -208,24 +232,29 @@
                 height: 100vh;
                 border-radius: 0;
             }
+
             .login-image-section {
                 flex: none;
                 height: 30vh;
                 padding: 20px;
             }
+
             .brand-logo {
                 top: 20px;
                 left: 20px;
                 font-size: 20px;
             }
+
             .image-content h2 {
                 font-size: 24px;
                 margin-bottom: 10px;
             }
+
             .image-content p {
                 font-size: 14px;
                 margin-bottom: 15px;
             }
+
             .login-form-section {
                 padding: 40px 30px;
                 flex: 1;
@@ -237,6 +266,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="login-container">
         <!-- Left Image Section -->
@@ -247,9 +277,10 @@
             </div>
             <div class="image-content">
                 <h2>Panel de<br>Licencias</h2>
-                <p>Genera y administra las licencias de tus clientes del Sistema de Préstamos y Cobranza con total seguridad.</p>
+                <p>Genera y administra las licencias de tus clientes del Sistema de Préstamos y Cobranza con total
+                    seguridad.</p>
                 <div class="version">
-                    <i class="fa-solid fa-circle-check"></i> Sistema de Licenciamiento v1.0.0
+                    <i class="fa-solid fa-circle-check"></i> Sistema de Licenciamiento v1.1.0
                 </div>
             </div>
         </div>
@@ -264,35 +295,40 @@
                 <p>Sistema de Préstamos y Cobranza</p>
             </div>
 
-            <% if(error_msg && error_msg.length > 0) { %>
+            <% if(error_msg && error_msg.length> 0) { %>
                 <div class="alert-error">
                     <i class="fa-solid fa-circle-exclamation"></i>
-                    <span><%= error_msg %></span>
+                    <span>
+                        <%= error_msg %>
+                    </span>
                 </div>
-            <% } %>
+                <% } %>
 
-            <form action="/login" method="POST">
-                <div class="form-group">
-                    <label for="username">Usuario Administrador</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="username" name="username" placeholder="admin@licencias.com" required>
-                        <i class="fa-regular fa-envelope"></i>
-                    </div>
-                </div>
+                    <form action="/login" method="POST">
+                        <div class="form-group">
+                            <label for="username">Usuario Administrador</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="username" name="username" placeholder="admin@licencias.com"
+                                    required>
+                                <i class="fa-regular fa-envelope"></i>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label for="password">Contraseña de Acceso</label>
-                    <div class="input-wrapper">
-                        <input type="password" id="password" name="password" placeholder="••••••••••••" required>
-                        <i class="fa-solid fa-lock"></i>
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <label for="password">Contraseña de Acceso</label>
+                            <div class="input-wrapper">
+                                <input type="password" id="password" name="password" placeholder="••••••••••••"
+                                    required>
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+                        </div>
 
-                <button type="submit" class="btn-login">
-                    INGRESAR AL PANEL <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                </button>
-            </form>
+                        <button type="submit" class="btn-login">
+                            INGRESAR AL PANEL <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        </button>
+                    </form>
         </div>
     </div>
 </body>
+
 </html>
