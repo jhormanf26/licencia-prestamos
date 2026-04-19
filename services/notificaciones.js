@@ -6,17 +6,20 @@ const db = require('../config/db');
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST || 'smtp.gmail.com',
     port: parseInt(process.env.EMAIL_PORT) || 587,
-    secure: false,
+    secure: process.env.EMAIL_PORT == 465, // true para puerto 465
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
+    },
+    tls: {
+        rejectUnauthorized: false // Evita errores de certificados en algunas redes/antivirus
     }
 });
 
 // ─── Función para enviar email de alerta ─────────────────────────────────────
 async function enviarAlertaVencimiento(empresa, licencia, diasRestantes) {
     if (!process.env.EMAIL_USER || process.env.EMAIL_USER === 'tu_correo@gmail.com') {
-        console.log(`[NOTIF] Sin email configurado. Licencia #${licencia.id} de ${empresa.razon_social} vence en ${diasRestantes} días.`);
+        console.log(`[NOTIF] Sin email configurado correctamente. Licencia #${licencia.id} de ${empresa.razon_social} vence en ${diasRestantes} días.`);
         return;
     }
 
@@ -51,7 +54,7 @@ async function enviarAlertaVencimiento(empresa, licencia, diasRestantes) {
 
     try {
         await transporter.sendMail({
-            from: process.env.EMAIL_FROM || '"Panel Licencias" <notificaciones@sistema.com>',
+            from: process.env.EMAIL_FROM || '"Panel Licencias" <[EMAIL_ADDRESS]>',
             to: emailDestino,
             subject: asunto,
             html: htmlBody
